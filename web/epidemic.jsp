@@ -9,8 +9,16 @@
 <html>
 <head>
     <title>疫情分析系统</title>
+    <style type="text/css">
+        #container{
+            height: 500px;
+        }
+    </style>
 </head>
 <body>
-没有内容,首次创建
+<div  id="container">
+    疫情信息
+</div>
+<a href="login.jsp">登录</a>
 </body>
 </html>
