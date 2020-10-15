@@ -12,7 +12,7 @@ public class EpidemicApplicationInitializer extends AbstractAnnotationConfigDisp
     @Override
     protected Class<?>[] getRootConfigClasses() {
         //Spring的配置类
-        return new Class[0];
+        return new Class[]{SpringConfig.class};
     }
 
     //返回Spring MVC的Java配置类
