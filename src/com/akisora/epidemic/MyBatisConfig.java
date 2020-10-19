@@ -51,7 +51,7 @@ public class MyBatisConfig {
         try {
             //设置映射xml文件的路径
             Resource[] resources = new PathMatchingResourcePatternResolver()
-                    .getResources("classpath:com/akisora/epidemic/mapper/");
+                    .getResources("classpath:com/akisora/epidemic/mapper/*Mapper.xml");
             factoryBean.setMapperLocations(resources);
             factory = factoryBean.getObject();
         } catch (Exception e) {
@@ -60,6 +60,10 @@ public class MyBatisConfig {
         //设置xml文件中的类所在的包
         factoryBean.setTypeAliasesPackage("com.akisora.epidemic.beans");
 
+        //为例让myBatis自动将下划线分割的列名装换为驼峰表示的属性名
+        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+        configuration.setMapUnderscoreToCamelCase(true);
+        factoryBean.setConfiguration(configuration);
         return factory;
     }
 }

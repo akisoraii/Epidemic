@@ -1,13 +1,13 @@
 package com.akisora.epidemic;
 
+import com.akisora.epidemic.common.DateConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
 
 /*
 * SpringMVC配置类
@@ -19,6 +19,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @ComponentScan(includeFilters =
 @ComponentScan.Filter(type = FilterType.ANNOTATION,classes = Controller.class))
 public class SpringMVCConfig extends WebMvcConfigurerAdapter {
+
+    @Autowired
+    private DateConverter dateConverter;
 
     //添加视图控制器
     @Override
@@ -32,5 +35,16 @@ public class SpringMVCConfig extends WebMvcConfigurerAdapter {
     public void configureViewResolvers(ViewResolverRegistry registry) {
         //定义了一个内部资源视图解析器(InternalResourceViewResolver)
         registry.jsp("/", ".jsp");
+    }
+
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
+    }
+
+    //配置日期转换器
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(dateConverter);
     }
 }

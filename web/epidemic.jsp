@@ -11,13 +11,14 @@
     <title>疫情分析系统</title>
     <style type="text/css">
         #container{
-            height: 500px;
+            height: 1000px;
+            background-image: url('img/back.jpg');
         }
     </style>
 </head>
 <body>
 <div  id="container">
-    疫情信息
+    <p style="margin: auto">疫情信息</p>
 </div>
 <a href="login.jsp">登录</a>
 </body>
