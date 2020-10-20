@@ -27,7 +27,7 @@ public class DateConverter implements Converter<String, Date> {
         try {
             date = sdf.parse(s);
         } catch (ParseException e) {
-            logger.error("装换提交的参数 " + s + "为日期值时出错\t" + e.getMessage());
+            logger.error("转换提交的参数 " + s + "为日期值时出错\t" + e.getMessage());
         }
         return date;
     }
