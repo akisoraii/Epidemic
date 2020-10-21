@@ -1,5 +1,6 @@
 package com.akisora.epidemic.controller;
 
+import com.akisora.epidemic.beans.AjaxResponseInfo;
 import com.akisora.epidemic.beans.ProvinceInfo;
 import com.akisora.epidemic.service.ProvinceService;
 import org.apache.log4j.Logger;
@@ -24,13 +25,17 @@ public class ProvinceController {
 
     @GetMapping("/ajax/noDataList")
     @ResponseBody
-    public List<ProvinceInfo> noDataProvinceList(String date) {
+    public AjaxResponseInfo noDataProvinceList(String date) {
         logger.debug("date=" + date);
         List<ProvinceInfo> list = null;
+        AjaxResponseInfo<List<ProvinceInfo>> responseInfo = new AjaxResponseInfo<>();
         if (!StringUtils.isEmpty(date)) {
             list = this.provinceService.findNoDataProvinces(date);
-            logger.debug(list);
+            responseInfo.setData(list);
+        } else {
+            responseInfo.setCode(-1);
+            responseInfo.setMsg("参数不足!");
         }
-        return list;
+        return responseInfo;
     }
 }

@@ -27,7 +27,6 @@ public class ProvinceServiceImpl implements ProvinceService {
             year = Short.parseShort(array[0]);
             month = Short.parseShort(array[1]);
             day = Short.parseShort(array[2]);
-            logger.debug("year="+year+" year="+month+" year="+day);
             list = provinceMapper.findNoDataProvinces(year, month, day);
         }
 

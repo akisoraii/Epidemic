@@ -48,15 +48,7 @@ public class MyBatisConfig {
         factoryBean.setDataSource(dataSource);
 
         SqlSessionFactory factory = null;
-        try {
-            //设置映射xml文件的路径
-            Resource[] resources = new PathMatchingResourcePatternResolver()
-                    .getResources("classpath:com/akisora/epidemic/mapper/*Mapper.xml");
-            factoryBean.setMapperLocations(resources);
-            factory = factoryBean.getObject();
-        } catch (Exception e) {
-            logger.error("解析映射xml文件时异常:\t"+e.getMessage());
-        }
+
         //设置xml文件中的类所在的包
         factoryBean.setTypeAliasesPackage("com.akisora.epidemic.beans");
 
@@ -64,6 +56,18 @@ public class MyBatisConfig {
         org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
         configuration.setMapUnderscoreToCamelCase(true);
         factoryBean.setConfiguration(configuration);
+
+        try {
+            //设置映射xml文件的路径
+            Resource[] resources = new PathMatchingResourcePatternResolver()
+                    .getResources("classpath:com/akisora/epidemic/mapper/*Mapper.xml");
+            factoryBean.setMapperLocations(resources);
+            //factoryBean从这里开始加载,参数配置需在前面
+            factory = factoryBean.getObject();
+        } catch (Exception e) {
+            logger.error("解析映射xml文件时异常:\t"+e.getMessage());
+        }
+
         return factory;
     }
 }

@@ -16,8 +16,7 @@ import org.springframework.web.servlet.config.annotation.*;
 @Configuration    //Spring配置类注解
 @EnableWebMvc     //自动注册SpringMVC的映射和构造器注解
 //组件扫描注解,缺省则扫描包及其子包所有类,这里指定了扫描对象.扫描指定的包路径下带有@Controller、@Service、@Repository、@Component的类
-@ComponentScan(includeFilters =
-@ComponentScan.Filter(type = FilterType.ANNOTATION,classes = Controller.class))
+@ComponentScan(includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION,classes = Controller.class))
 public class SpringMVCConfig extends WebMvcConfigurerAdapter {
 
     @Autowired

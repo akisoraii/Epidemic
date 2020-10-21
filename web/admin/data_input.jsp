@@ -100,8 +100,16 @@
 
         //从服务器获取未录入数据的省份列表(get请求),发送date格式数据,在回调函数中处理结果
         $.get("${pageContext.request.contextPath}/province/ajax/noDataList", {date: date}, function (resp) {
-            console.info(resp);
+            if (resp.code<0){
+                alert(resp.msg);
+            }else{
+                //
+                fillProvinceToTable(resp.data);
+            };
         }, "json");
+    }
+    function fillProvinceToTable(array){
+
     }
 </script>
 </body>

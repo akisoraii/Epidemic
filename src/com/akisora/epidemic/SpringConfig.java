@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @ComponentScan(excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION,classes = Controller.class))
-@EnableTransactionManagement    //启动事务管理器
+@EnableTransactionManagement
 public class SpringConfig {
 
     //事务管理器
