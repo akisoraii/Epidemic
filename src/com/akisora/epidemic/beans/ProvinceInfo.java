@@ -5,14 +5,6 @@ public class ProvinceInfo {
     private String provinceName;
     private String provincePY;
 
-    public String getProvincePY() {
-        return provincePY;
-    }
-
-    public void setProvincePY(String provincePY) {
-        this.provincePY = provincePY;
-    }
-
     public Integer getProvinceId() {
         return provinceId;
     }
@@ -29,4 +21,11 @@ public class ProvinceInfo {
         this.provinceName = provinceName;
     }
 
+    public String getProvincePY() {
+        return provincePY;
+    }
+
+    public void setProvincePY(String provincePY) {
+        this.provincePY = provincePY;
+    }
 }

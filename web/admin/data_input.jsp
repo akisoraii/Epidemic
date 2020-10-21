@@ -29,12 +29,18 @@
                 <li>数据录入</li>
             </ul>
             <div class="row">
-                <div class="input-group date col-md-4" id="datepicker" data-date-format="yyyy-mm-dd">
-                    <div class="input-group-addon">数据日期</div>
-                    <input class="form-control" size="16" type="text" value="" readonly id="dataDate">
-                    <div class="input-group-addon">
-                        <span class="add-on glyphicon glyphicon-calendar"></span>
+                <div class="col-md-4">
+                    <div class="input-group date" id="datepicker" data-date-format="yyyy-mm-dd">
+                        <div class="input-group-addon">数据日期</div>
+                        <input class="form-control" size="16" type="text" value="" readonly id="dataDate">
+                        <div class="input-group-addon">
+                            <span class="add-on glyphicon glyphicon-calendar"></span>
+                        </div>
                     </div>
+                </div>
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-primary" id="btnSubmit">提交 <span
+                            class="glyphicon glyphicon-ok"></span></button>
                 </div>
             </div>
             <br>
@@ -51,16 +57,11 @@
                     </tr>
                     </thead>
                     <tbody id="body1">
-                    <tr>
-                        <td>湖北</td>
-                        <td><input type="text" name="affirmed" size="4" maxlength="4" class="form-control"></td>
-                        <td><input type="text" name="suspected" size="4" maxlength="4" class="form-control"></td>
-                        <td><input type="text" name="isolated" size="4" maxlength="4" class="form-control"></td>
-                        <td><input type="text" name="cured" size="4" maxlength="4" class="form-control"></td>
-                        <td><input type="text" name="dead" size="4" maxlength="4" class="form-control"></td>
-                    </tr>
                     </tbody>
                 </table>
+            </div>
+            <div class="row">
+                <div id="msg"></div>
             </div>
         </div>
     </div>
@@ -71,8 +72,10 @@
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/bootstrap/datepicker/bootstrap-datepicker.zh-CN.min.js"></script>
 <script type="text/javascript">
+    let provinces = null;
     //使用bootstrap特性注册日期选择器函数
     $(function () {
+
         //设置日期输入框的初始值和取值范围
         const datepicker = $("#datepicker");
         datepicker.datepicker({
@@ -89,27 +92,118 @@
         datepicker.datepicker().on("changeDate", loadProvinceList);
         //装载省份列表
         loadProvinceList();
+        //给提交按钮绑定事件处理函数
+        $("#btnSubmit").click(checkAndSubmitData);
     });
+
+    function checkAndSubmitData() {
+        let valid = true;
+        const affirmed = $("input[name=affirmed]");
+        const suspected = $("input[name=suspected]");
+        const isolated = $("input[name=isolated]");
+        const cured = $("input[name=cured]");
+        const dead = $("input[name=dead]");
+        affirmed.each(function (index, element) {
+            if (isNaN(Number(element.value))) {
+                valid = false;
+            }
+        });
+        if (valid) {
+            //提交
+            const dataArray = [];
+            for (let i = 0; i < provinces.length; i++) {
+                const obj = {};
+                obj.provinceId = provinces[i].provinceId;
+                obj.affirmed = affirmed.get(i).value;
+                obj.suspected = suspected.get(i).value;
+                obj.isolated = isolated.get(i).value;
+                obj.cured = cured.get(i).value;
+                obj.dead = dead.get(i).value;
+                dataArray.push(obj);
+            }
+            const date = $("#dataDate").val();
+            const data={};
+            data.date=date;
+            data.array=dataArray;
+            //传统post提交方式
+            <%--$.post("${pageContext.request.contextPath}/epidemicData/ajax/input",data,function (resp) {--%>
+            <%--    console.info(resp)--%>
+            <%--});--%>
+            //使用ajax提交方式
+            $.ajax({
+                url:"${pageContext.request.contextPath}/epidemicData/ajax/input",
+                type:"POST",
+                contentType:"application/json",
+                data:JSON.stringify(data),
+                dataType:"json",
+                success:function (resp) {
+                    console.info(resp)
+                }
+            })
+        } else {
+            alert("请检查你的输入,确保输入有效的数值!");
+        }
+    }
 
     function loadProvinceList() {
         //清空表格
         const tbody1 = $("#body1");
-        tbody1.empty()
+        tbody1.empty();
         //获取当前日期框的日期
         const date = $("#dataDate").val();
 
         //从服务器获取未录入数据的省份列表(get请求),发送date格式数据,在回调函数中处理结果
         $.get("${pageContext.request.contextPath}/province/ajax/noDataList", {date: date}, function (resp) {
-            if (resp.code<0){
+            if (resp.code < 0) {
                 alert(resp.msg);
-            }else{
+            } else {
                 //
                 fillProvinceToTable(resp.data);
-            };
+            }
         }, "json");
     }
-    function fillProvinceToTable(array){
 
+    function fillProvinceToTable(array) {
+        //
+        if (array && array.length > 0) {
+            provinces = array;
+            console.info(provinces)
+            //填充到表格中
+            const tbody1 = $("#body1");
+            $.each(array, function (index, province) {
+                const tr = $("<tr>");
+                let td = $("<td>");
+
+//----------------------------------------------------------
+                td.text(province.provinceName);
+                tr.append(td);
+//----------------------------------------------------------
+                td = $("<td>");
+                td.html('<input type="text" name="affirmed" size="4" maxlength="4" class="form-control" value="0">');
+                tr.append(td);
+//----------------------------------------------------------
+                td = $("<td>");
+                td.html('<input type="text" name="suspected" size="4" maxlength="4" class="form-control" value="0">');
+                tr.append(td);
+//----------------------------------------------------------
+                td = $("<td>");
+                td.html('<input type="text" name="isolated" size="4" maxlength="4" class="form-control" value="0">');
+                tr.append(td);
+//----------------------------------------------------------
+                td = $("<td>");
+                td.html('<input type="text" name="cured" size="4" maxlength="4" class="form-control" value="0">');
+                tr.append(td);
+//----------------------------------------------------------
+                td = $("<td>");
+                td.html('<input type="text" name="dead" size="4" maxlength="4" class="form-control" value="0">');
+                tr.append(td);
+
+                tbody1.append(tr)
+            });
+
+        } else {
+            $("#msg").html("所有省份今日数据已录入完成!")
+        }
     }
 </script>
 </body>
