@@ -125,11 +125,13 @@
             const data={};
             data.date=date;
             data.array=dataArray;
+
             //传统post提交方式
             <%--$.post("${pageContext.request.contextPath}/epidemicData/ajax/input",data,function (resp) {--%>
             <%--    console.info(resp)--%>
             <%--});--%>
             //使用ajax提交方式
+
             $.ajax({
                 url:"${pageContext.request.contextPath}/epidemicData/ajax/input",
                 type:"POST",
@@ -137,7 +139,13 @@
                 data:JSON.stringify(data),
                 dataType:"json",
                 success:function (resp) {
-                    console.info(resp)
+                    if (resp.code < 0) {
+                        alert(resp.msg);
+                    } else {
+                        //加载未录入数据
+                        fillProvinceToTable(resp.data);
+                        alert("提交成功!");
+                    }
                 }
             })
         } else {
@@ -146,9 +154,8 @@
     }
 
     function loadProvinceList() {
-        //清空表格
-        const tbody1 = $("#body1");
-        tbody1.empty();
+        //清空消息
+        $("#msg").empty();
         //获取当前日期框的日期
         const date = $("#dataDate").val();
 
@@ -157,19 +164,21 @@
             if (resp.code < 0) {
                 alert(resp.msg);
             } else {
-                //
+                //加载未录入数据
                 fillProvinceToTable(resp.data);
             }
         }, "json");
     }
 
     function fillProvinceToTable(array) {
-        //
+        //清空表格
+        const tbody1 = $("#body1");
+        tbody1.empty();
+        //获取数据
         if (array && array.length > 0) {
             provinces = array;
             console.info(provinces)
             //填充到表格中
-            const tbody1 = $("#body1");
             $.each(array, function (index, province) {
                 const tr = $("<tr>");
                 let td = $("<td>");
