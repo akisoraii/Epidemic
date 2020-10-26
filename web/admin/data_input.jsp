@@ -177,7 +177,7 @@
         //获取数据
         if (array && array.length > 0) {
             provinces = array;
-            console.info(provinces)
+            // console.info(provinces)
             //填充到表格中
             $.each(array, function (index, province) {
                 const tr = $("<tr>");

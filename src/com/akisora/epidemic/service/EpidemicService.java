@@ -1,6 +1,7 @@
 package com.akisora.epidemic.service;
 
 import com.akisora.epidemic.beans.DailyEpidemicInfo;
+import com.akisora.epidemic.beans.EpidemicDetailInfo;
 import com.akisora.epidemic.beans.ProvinceInfo;
 import com.akisora.epidemic.beans.UserInfo;
 
@@ -15,4 +16,9 @@ public interface EpidemicService {
      */
 
     List<ProvinceInfo> saveData(DailyEpidemicInfo dailyEpidemicInfo, Integer userId);
+
+    /**
+     *  获取最新疫情数据
+     */
+    List<EpidemicDetailInfo> findLastestData();
 }

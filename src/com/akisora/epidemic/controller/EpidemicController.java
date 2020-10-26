@@ -1,18 +1,12 @@
 package com.akisora.epidemic.controller;
 
 
-import com.akisora.epidemic.beans.AjaxResponseInfo;
-import com.akisora.epidemic.beans.DailyEpidemicInfo;
-import com.akisora.epidemic.beans.ProvinceInfo;
-import com.akisora.epidemic.beans.UserInfo;
+import com.akisora.epidemic.beans.*;
 import com.akisora.epidemic.service.EpidemicService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -43,6 +37,21 @@ public class EpidemicController {
             List<ProvinceInfo> list = this.epidemicService.saveData(dailyEpidemicInfo, user.getUserId());
             //接受业务层返回信息,返回json格式给客户端
             responseInfo.setData(list);
+        }
+        return responseInfo;
+    }
+
+    @GetMapping("/ajax/lastestData")
+    @ResponseBody
+    public AjaxResponseInfo findLastestData() {
+        AjaxResponseInfo responseInfo = new AjaxResponseInfo();
+        List<EpidemicDetailInfo> list = epidemicService.findLastestData();
+
+        if (responseInfo != null) {
+            responseInfo.setData(list);
+        } else {
+            responseInfo.setCode(-1);
+            responseInfo.setMsg("参数不足!");
         }
         return responseInfo;
     }
