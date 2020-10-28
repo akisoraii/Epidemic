@@ -109,7 +109,7 @@
         const option = {
             title: {
                 text: '全国疫情柱状图',
-                subtext: '2020-02-28'
+                subtext: '2020-10-23'
             },
             // 提示框
             tooltip: {
@@ -131,7 +131,7 @@
             series: [
                 {
                     type: 'bar',
-                    name: '2020-02-28',
+                    name: '2020-10-23',
                     data: []
                 }
             ]
@@ -165,7 +165,7 @@
             myMap = echarts.init($("#myMap").get(0));
             const option = {
                 title: {
-                    text: "2020-02-28 全国疫情分布图"
+                    text: "2020-10-23 全国疫情分布图"
                 },
                 legend: {
                     data: ["累计确诊人数"]
